@@ -1,5 +1,6 @@
 package com.inveitix.timeoffsystem.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,12 +12,19 @@ public class User
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+
+	@Column(columnDefinition="tinyint(1) default 0")
+	private boolean admin;
+
 	private String name;
+
 	private String email;
+
 	private String password;
-	private int egn;
+
+	private String egn;
+
 	private int pto;
-	private int upto;
 
 	public long getId() {
 		return id;
@@ -42,10 +50,10 @@ public class User
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getEgn() {
+	public String getEgn() {
 		return egn;
 	}
-	public void setEgn(int egn) {
+	public void setEgn(String egn) {
 		this.egn = egn;
 	}
 	public int getPto() {
@@ -54,11 +62,8 @@ public class User
 	public void setPto(int pto) {
 		this.pto = pto;
 	}
-	public int getUpto() {
-		return upto;
-	}
-	public void setUpto(int upto) {
-		this.upto = upto;
+	public boolean getAdmin() {
+		return admin;
 	}
 
 }

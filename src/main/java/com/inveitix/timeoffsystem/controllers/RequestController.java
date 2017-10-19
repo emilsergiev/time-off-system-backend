@@ -1,6 +1,16 @@
 package com.inveitix.timeoffsystem.controllers;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +24,8 @@ import com.inveitix.timeoffsystem.entities.Request;
 import com.inveitix.timeoffsystem.repositories.RequestRepository;
 
 @RestController
-@RequestMapping(path="/api/requests")
+@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping(path="/requests")
 public class RequestController
 {
 	@Autowired
@@ -27,11 +38,43 @@ public class RequestController
 	}
 
 	@PostMapping(path="/add")
-	public String addNewRequest(@RequestBody Request request)
+	public Map<String, Set<String>> addNewRequest(@Valid 
+			@RequestBody Request request, BindingResult result)
 	{
-		try { repo.save(request); }
+		Map<String, Set<String>> errors = findRequestErrors(request, result);
+
+		if (errors.isEmpty()) { repo.save(request); }
+
+		return errors;
+	}
+
+	@PutMapping(path="/update/{id}")
+	public String updateRequest(@RequestBody Request request, @PathVariable long id)
+	{
+		try
+		{
+			Request update = repo.findOne(id);
+			update.setType(request.getType());
+			update.setDays(request.getDays());
+			update.setDates(request.getDates());
+			update.setSubmitTime(request.getSubmitTime());
+			repo.save(update);
+		}
 		catch (Exception e) { return e.toString(); }
-		return "Request succesfully created with id = " + request.getId();
+		return "Request succesfully updated!";
+	}
+
+	@PutMapping(path="/status/{id}")
+	public String statusUpdate(@RequestBody String status, @PathVariable long id)
+	{
+		try
+		{
+			Request update = repo.findOne(id);
+			update.setStatus(status);
+			repo.save(update);
+		}
+		catch (Exception e) { return e.toString(); }
+		return "Status succesfully updated!";
 	}
 
 	@DeleteMapping(path="/delete/{id}")
@@ -42,21 +85,23 @@ public class RequestController
 		return "Request succesfully deleted!";
 	}
 
-	@PutMapping(path="/update/{id}")
-	public String updateRequest(@RequestBody Request request, @PathVariable long id)
+	private Map<String, Set<String>> findRequestErrors(
+			Request request, BindingResult result)
 	{
-		try
+		Map<String, Set<String>> errors = new HashMap<>();
+
+		for (FieldError fieldError : result.getFieldErrors())
 		{
-			Request r = repo.findOne(id);
-			r.setType(request.getType());
-			r.setDays(request.getDays());
-			r.setDates(request.getDates());
-			r.setSubmit(request.getSubmit());
-			r.setStatus(request.getStatus());
-			repo.save(r);
+			String code = fieldError.getCode();
+			String field = fieldError.getField();
+
+			if (code.equals("NotBlank"))
+			{
+				errors.computeIfAbsent(field, key -> new HashSet<>())
+				.add("required");
+			}
 		}
-		catch (Exception e) { return e.toString(); }
-		return "Request succesfully updated!";
+		return errors;
 	}
 
 }
