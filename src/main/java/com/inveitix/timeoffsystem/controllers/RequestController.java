@@ -1,5 +1,7 @@
 package com.inveitix.timeoffsystem.controllers;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -41,6 +43,10 @@ public class RequestController
 	public Map<String, Set<String>> addNewRequest(@Valid 
 			@RequestBody Request request, BindingResult result)
 	{
+		Calendar calendar = Calendar.getInstance();
+		Date now = new Date(calendar.getTime().getTime());
+		request.setSubmitTime(now);
+
 		Map<String, Set<String>> errors = findRequestErrors(request, result);
 
 		if (errors.isEmpty()) { repo.save(request); }
@@ -51,13 +57,18 @@ public class RequestController
 	@PutMapping(path="/update/{id}")
 	public String updateRequest(@RequestBody Request request, @PathVariable long id)
 	{
+		Calendar calendar = Calendar.getInstance();
+		Date now = new Date(calendar.getTime().getTime());
+
 		try
 		{
 			Request update = repo.findOne(id);
 			update.setType(request.getType());
 			update.setDays(request.getDays());
 			update.setDates(request.getDates());
-			update.setSubmitTime(request.getSubmitTime());
+			update.setReason(request.getReason());
+			update.setNote(request.getNote());
+			update.setSubmitTime(now);
 			repo.save(update);
 		}
 		catch (Exception e) { return e.toString(); }
