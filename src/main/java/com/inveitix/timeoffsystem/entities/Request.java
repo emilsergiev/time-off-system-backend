@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -17,19 +16,23 @@ public class Request
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@NotBlank
 	private long userId;
 
 	@NotBlank
 	private String type;
 
-	@NotBlank
 	private int days;
 
 	@NotBlank
 	private String dates;
 
 	@NotBlank
+	@Column(columnDefinition="text")
+	private String reason;
+
+	@Column(columnDefinition="text")
+	private String note;
+
 	private Date submitTime;
 
 	@Column(columnDefinition="varchar(255) default 'Not Reviewed'")
@@ -64,6 +67,18 @@ public class Request
 	}
 	public void setDates(String dates) {
 		this.dates = dates;
+	}
+	public String getReason() {
+		return reason;
+	}
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
 	}
 	public Date getSubmitTime() {
 		return submitTime;
