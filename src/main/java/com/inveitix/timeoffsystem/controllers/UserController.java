@@ -42,6 +42,8 @@ public class UserController
 	@PostMapping(path="/login")
 	public String login(@RequestBody User form)
 	{
+		//TODO Encrypt password before comparing it to the encrypted password!
+		// Or decrypt the encrypted password before comparing it to the plain one.
 		User user = userRepo.getUserByEmail(form.getEmail());
 
 		if (user != null && form.getPassword().equals(user.getPassword()))
@@ -91,12 +93,13 @@ public class UserController
 
 	private String authorizeUser(User user)
 	{
-		// TODO some authorization security token etc...
+		//TODO some authorization security token etc...
 		return "login successfull";
 	}
 
 	private void registerUser(User form)
 	{
+		//TODO encrypt password before saving it to database!
 		User user = new User();
 		user.setName(form.getName());
 		user.setEmail(form.getEmail());
