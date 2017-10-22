@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class User
@@ -16,12 +20,20 @@ public class User
 	@Column(columnDefinition="tinyint(1) default 0")
 	private boolean admin;
 
+	@NotBlank
+    @Size(min=2, max=127)
 	private String name;
 
+	@Email
+	@NotBlank
 	private String email;
 
+	@NotBlank
+    @Size(min=8, max=255)
 	private String password;
 
+	@NotBlank
+    @Size(min=10, max=10)
 	private String egn;
 
 	private int pto;

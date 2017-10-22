@@ -32,7 +32,7 @@ public class Request
 	@NotBlank
 	private Date submitTime;
 
-	@Column(columnDefinition="default NotReviewed")
+	@Column(columnDefinition="varchar(255) default 'Not Reviewed'")
 	private String status;
 
 	public long getId() {

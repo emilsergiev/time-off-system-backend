@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inveitix.timeoffsystem.entities.User;
-import com.inveitix.timeoffsystem.models.LoginForm;
-import com.inveitix.timeoffsystem.models.RegisterForm;
 import com.inveitix.timeoffsystem.repositories.UserRepository;
 
 @RestController
@@ -31,6 +29,7 @@ import com.inveitix.timeoffsystem.repositories.UserRepository;
 @RequestMapping(path="/users")
 public class UserController
 {
+
 	@Autowired
 	UserRepository userRepo;
 
@@ -41,7 +40,7 @@ public class UserController
 	}
 
 	@PostMapping(path="/login")
-	public String login(@RequestBody LoginForm form)
+	public String login(@RequestBody User form)
 	{
 		User user = userRepo.getUserByEmail(form.getEmail());
 
@@ -54,7 +53,7 @@ public class UserController
 
 	@PostMapping(path="/register")
 	public Map<String, Set<String>> register(
-			@Valid @RequestBody RegisterForm form, BindingResult result)
+			@Valid @RequestBody User form, BindingResult result)
 	{
 		Map<String, Set<String>> errors = findRegisterErrors(form, result);
 
@@ -96,7 +95,7 @@ public class UserController
 		return "login successfull";
 	}
 
-	private void registerUser(RegisterForm form)
+	private void registerUser(User form)
 	{
 		User user = new User();
 		user.setName(form.getName());
@@ -107,7 +106,7 @@ public class UserController
 	}
 
 	private Map<String, Set<String>> findRegisterErrors(
-			RegisterForm form, BindingResult result)
+			User form, BindingResult result)
 	{
 		Map<String, Set<String>> errors = new HashMap<>();
 
@@ -115,10 +114,10 @@ public class UserController
 			errors.computeIfAbsent("email", key -> new HashSet<>())
 			.add("emailTaken");
 		}
-		else if (!form.getPassword().equals(form.getEgn()))
+		if (!form.getPassword().equals(form.getEgn()))
 		{
-			errors.computeIfAbsent("passwordConfirm", key -> new HashSet<>())
-			.add("nomatch");
+			errors.computeIfAbsent("password", key -> new HashSet<>())
+			.add("doesnotmatch");
 		}
 
 		for (FieldError fieldError : result.getFieldErrors())
