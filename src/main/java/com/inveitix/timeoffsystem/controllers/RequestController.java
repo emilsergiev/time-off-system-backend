@@ -30,6 +30,9 @@ import com.inveitix.timeoffsystem.repositories.RequestRepository;
 @RequestMapping(path="/requests")
 public class RequestController
 {
+	private final String APPROVED = "approved";
+	private final String DISAPPROVED = "disapproved";
+	
 	@Autowired
 	RequestRepository repo;
 
@@ -40,8 +43,8 @@ public class RequestController
 	}
 
 	@PostMapping(path="/add")
-	public Map<String, Set<String>> addNewRequest(@Valid 
-			@RequestBody Request request, BindingResult result)
+	public Map<String, Set<String>> addNewRequest(@Valid @RequestBody Request request, 
+			BindingResult result)
 	{
 		Calendar calendar = Calendar.getInstance();
 		Date now = new Date(calendar.getTime().getTime());
@@ -75,8 +78,8 @@ public class RequestController
 		return "Request succesfully updated!";
 	}
 
-	@PutMapping(path="/status/{id}")
-	public String statusUpdate(@RequestBody String status, @PathVariable long id)
+	//@PutMapping(path="/status/{id}")
+	protected String statusUpdate(String status,long id)
 	{
 		try
 		{
@@ -114,5 +117,19 @@ public class RequestController
 		}
 		return errors;
 	}
-
+    
+	protected Request getRequestById(long id)
+	{
+		return repo.findOne(id);
+	}
+	
+    protected void approveRequest(long id)
+    {
+    	statusUpdate(APPROVED, id);
+    }
+    
+    protected void disapproveRequest(long id)
+    {
+    	statusUpdate(DISAPPROVED, id);
+    }
 }
