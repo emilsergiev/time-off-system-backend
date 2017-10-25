@@ -1,63 +1,38 @@
 package com.inveitix.timeoffsystem.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inveitix.timeoffsystem.entities.Admin;
-import com.inveitix.timeoffsystem.repositories.AdminRepository;
+import com.inveitix.timeoffsystem.entities.Request;
 
 @RestController
-@RequestMapping(path="/api/admins")
-public class AdminController
+@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping(path="/admin")
+public class AdminController 
 {
-	@Autowired
-	AdminRepository repo;
-
-	@GetMapping(path="/all")
-	public Iterable<Admin> getAllAdmins()
+	RequestController reqController;
+	
+	@PutMapping(path="/approve-request/{id}")
+	public String approveRequest(@PathVariable long id)
 	{
-		return repo.findAll();
+		reqController.approveRequest(id);
+		return "Successfully approved";
 	}
-
-	@PostMapping(path="/add")
-	public String addNewAdmin(@RequestBody Admin admin)
+	
+	@PutMapping(path="/disapprove-request/{id}")
+	public String disapproveRequest(@PathVariable long id)
 	{
-		try { repo.save(admin); }
-		catch (Exception e) { return e.toString(); }
-		return "Admin succesfully created with id = " + admin.getId();
+		reqController.disapproveRequest(id);
+		return "Successfully disapproved";
 	}
-
-	@DeleteMapping(path="/delete/{id}")
-	public String deleteAdmin(@PathVariable long id)
+	
+	@RequestMapping(path="/all-requests")
+	public @ResponseBody Iterable<Request> getAllRequests()
 	{
-		try { repo.delete(id); }
-		catch (Exception e) { return e.toString(); }
-		return "Admin succesfully deleted!";
+		return reqController.getAllRequests();
 	}
-
-	@PutMapping(path="/update/{id}")
-	public String updateAdmin(@RequestBody Admin admin, @PathVariable long id)
-	{
-		try
-		{
-			Admin a = repo.findOne(id);
-			a.setName(admin.getName());
-			a.setEmail(admin.getEmail());
-			a.setPassword(admin.getPassword());
-			a.setEgn(admin.getEgn());
-			a.setPto(admin.getPto());
-			a.setUpto(admin.getUpto());
-			repo.save(a);
-		}
-		catch (Exception e) { return e.toString(); }
-		return "Admin succesfully updated!";
-	}
-
 }

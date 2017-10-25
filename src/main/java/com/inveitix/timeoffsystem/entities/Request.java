@@ -2,10 +2,12 @@ package com.inveitix.timeoffsystem.entities;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Request
@@ -13,10 +15,27 @@ public class Request
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+
+	private long userId;
+
+	@NotBlank
 	private String type;
+
 	private int days;
+
+	@NotBlank
 	private String dates;
-	private Date submit;
+
+	@NotBlank
+	@Column(columnDefinition="text")
+	private String reason;
+
+	@Column(columnDefinition="text")
+	private String note;
+
+	private Date submitTime;
+
+	@Column(columnDefinition="varchar(255) default 'Not Reviewed'")
 	private String status;
 
 	public long getId() {
@@ -24,6 +43,12 @@ public class Request
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+	public long getUserId() {
+		return userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 	public String getType() {
 		return type;
@@ -43,11 +68,23 @@ public class Request
 	public void setDates(String dates) {
 		this.dates = dates;
 	}
-	public Date getSubmit() {
-		return submit;
+	public String getReason() {
+		return reason;
 	}
-	public void setSubmit(Date submit) {
-		this.submit = submit;
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public Date getSubmitTime() {
+		return submitTime;
+	}
+	public void setSubmitTime(Date today) {
+		this.submitTime = today;
 	}
 	public String getStatus() {
 		return status;
@@ -55,5 +92,4 @@ public class Request
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 }

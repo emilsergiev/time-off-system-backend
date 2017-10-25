@@ -1,9 +1,14 @@
 package com.inveitix.timeoffsystem.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class User
@@ -11,12 +16,27 @@ public class User
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+
+	@Column(columnDefinition="tinyint(1) default 0")
+	private boolean admin;
+
+	@NotBlank
+    @Size(min=2, max=127)
 	private String name;
+
+	@Email
+	@NotBlank
 	private String email;
+
+	@NotBlank
+    @Size(min=8, max=255)
 	private String password;
-	private int egn;
+
+	@NotBlank
+    @Size(min=10, max=10)
+	private String egn;
+
 	private int pto;
-	private int upto;
 
 	public long getId() {
 		return id;
@@ -42,10 +62,10 @@ public class User
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getEgn() {
+	public String getEgn() {
 		return egn;
 	}
-	public void setEgn(int egn) {
+	public void setEgn(String egn) {
 		this.egn = egn;
 	}
 	public int getPto() {
@@ -54,11 +74,8 @@ public class User
 	public void setPto(int pto) {
 		this.pto = pto;
 	}
-	public int getUpto() {
-		return upto;
-	}
-	public void setUpto(int upto) {
-		this.upto = upto;
+	public boolean getAdmin() {
+		return admin;
 	}
 
 }
