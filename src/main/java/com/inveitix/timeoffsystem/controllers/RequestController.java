@@ -40,8 +40,8 @@ public class RequestController
 	}
 
 	@PostMapping(path="/add")
-	public Map<String, Set<String>> addNewRequest(@Valid 
-			@RequestBody Request request, BindingResult result)
+	public Map<String, Set<String>> addNewRequest(@Valid @RequestBody Request request, 
+			BindingResult result)
 	{
 		Calendar calendar = Calendar.getInstance();
 		Date now = new Date(calendar.getTime().getTime());
@@ -114,5 +114,6 @@ public class RequestController
 		}
 		return errors;
 	}
-
+    
+    
 }

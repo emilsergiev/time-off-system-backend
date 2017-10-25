@@ -1,5 +1,6 @@
 package com.inveitix.timeoffsystem.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inveitix.timeoffsystem.entities.User;
@@ -184,10 +186,43 @@ public class UserController
 	private boolean checkExistingEmail(String email)
 	{
 		User user = userRepo.getUserByEmail(email);
-
+		
 		if (user != null) { return true; }
 
 		return false;
 	}
-
+	
+	
+    //this method will return -1 if no users are registered w/ that username
+	@RequestMapping(path="/id-of-{username}")
+    public @ResponseBody int getIdByUsername(@PathVariable String username)
+    {
+    	//Iterable<User> users = userRepo.findAll();
+    	//working w/ lists is waaaaay easier
+    	ArrayList<User> users = new ArrayList<User>();
+    	
+    	User currUser;
+    	
+    	for(long i=1;i<userRepo.count();i++)
+    	{
+    		users.add(userRepo.findOne(i));
+    	}
+    	
+    	for(int i=1;i<users.size();i++)
+    	{
+    		currUser=users.get(i);
+    		if(username.equals(currUser.getName()))
+    		{
+    			return i;
+    		}
+    	}
+    	
+    	return -1;
+    }
+    
+    @RequestMapping(path="/get/{id}")
+    public @ResponseBody User getUserById(@PathVariable long id)
+    {
+    	return userRepo.findOne(id);
+    }
 }
