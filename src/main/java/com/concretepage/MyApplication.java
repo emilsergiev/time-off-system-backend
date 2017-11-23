@@ -1,12 +1,9 @@
-package com.inveitix.timeoffsystem;
-
+package com.concretepage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 @SpringBootApplication
-public class TimeOffSystemBackendApplication {
-
+public class MyApplication {  
 	public static void main(String[] args) {
-		SpringApplication.run(TimeOffSystemBackendApplication.class, args);
-	}
-}
+		SpringApplication.run(MyApplication.class, args);
+    }       
+}            
