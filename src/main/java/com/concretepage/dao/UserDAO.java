@@ -17,6 +17,23 @@ public class UserDAO implements IUserDAO {
 	public User getUserById(int userId) {
 		return entityManager.find(User.class, userId);
 	}
+	@Override
+	public User getUserByEmail(String userEmail) {
+		return entityManager.find(User.class, userEmail);
+	}
+	@Override
+	public boolean login(String email, String password) {
+		String hql = "FROM User as user WHERE user.email = ? and user.password = ?";
+		int count = entityManager.createQuery(hql).setParameter(1, email)
+		              .setParameter(2, password).getResultList().size();
+		return count > 0 ? true : false;
+		
+		/*if(entityManager.find(User.class, email) != null && entityManager.find(User.class, password) != null) {
+			return true;
+		} else {
+			return false;
+		}*/
+	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAllUsers() {

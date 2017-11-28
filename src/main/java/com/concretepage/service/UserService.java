@@ -15,7 +15,17 @@ public class UserService implements IUserService {
 	public User getUserById(int userId) {
 		User obj = userDAO.getUserById(userId);
 		return obj;
-	}	
+	}
+	@Override
+	public boolean login(String email, String password) {
+		boolean obj = userDAO.login(email, password);
+		return obj;
+	}
+	@Override
+	public User getUserByEmail(String userEmail) {
+		User obj = userDAO.getUserByEmail(userEmail);
+		return obj;
+	}
 	@Override
 	public List<User> getAllUsers(){
 		return userDAO.getAllUsers();

@@ -19,8 +19,6 @@ public class User implements Serializable {
     private String email;
 	@Column(name="password")	
 	private String password;
-	@Column(name="isAdmin")	
-	private String isAdmin;
 	public int getUserId() {
 		return userId;
 	}
@@ -38,11 +36,5 @@ public class User implements Serializable {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public String getIsAdmin() {
-		return isAdmin;
-	}
-	public void setIsAdmin(String isAdmin) {
-		this.isAdmin = isAdmin;
 	}
 } 
